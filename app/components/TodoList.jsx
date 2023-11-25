@@ -1,20 +1,20 @@
-const TodoList = () => {
+import Task from "./Task";
+
+const TodoList = ({ tasks }) => {
   return (
     <div className="overflow-x-auto">
       <table className="table">
         {/* head */}
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Favorite Color</th>
+            <th>TASKS</th>
+            <th>ACTIONS</th>
           </tr>
         </thead>
         <tbody>
-          {/* row 1 */}
-          <tr>
-            <td>Cy Ganderton</td>
-            <td>Blue</td>
-          </tr>
+          {tasks.map((task) => (
+            <Task key={task.id} task={task}></Task>
+          ))}
         </tbody>
       </table>
     </div>
