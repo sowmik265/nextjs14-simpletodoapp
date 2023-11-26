@@ -1,23 +1,41 @@
 "use client";
+import { editTodo } from "@/api";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin2Fill } from "react-icons/ri";
 import Modal from "./Modal";
 
 const Task = ({ task }) => {
+  const router = useRouter();
+
   const [openModalEdit, setOpenModalEdit] = useState(false);
 
   const [openModalDelete, setOpenModalDelete] = useState(false);
 
-  const [taskToEdit, setTaskToEdit] = useState(task.text);
+  const [taskToEditValue, setTaskToEditValue] = useState(task.text);
 
-  const handleSubmitEditTodo = () => {};
+  const handleSubmitEditTodo = async (e) => {
+    e.preventDefault();
+    await editTodo({
+      id: task.id,
+      text: taskToEditValue,
+    });
+    setTaskToEditValue("");
+    setOpenModalEdit(false);
+    router.refresh();
+  };
 
   return (
     <tr key={task.id}>
       <td className="w-full">{task.text}</td>
       <td className="flex gap-5">
-        <FaEdit cursor="pointer" className=" text-blue-500" size={21} />
+        <FaEdit
+          onClick={() => setOpenModalEdit(true)}
+          cursor="pointer"
+          className=" text-blue-500"
+          size={21}
+        />
         <RiDeleteBin2Fill
           cursor="pointer"
           className=" text-red-500"
@@ -25,11 +43,11 @@ const Task = ({ task }) => {
         />
         <Modal modalOpen={openModalEdit} setModalOpen={setOpenModalEdit}>
           <form onSubmit={handleSubmitEditTodo}>
-            <h3 className=" font-bold text-lg">Add New Task</h3>
+            <h3 className=" font-bold text-lg">Edit Task</h3>
             <div className="modal-action">
               <input
-                value={taskToEdit}
-                onChange={(e) => setTaskToEdit(e.target.value)}
+                value={taskToEditValue}
+                onChange={(e) => setTaskToEditValue(e.target.value)}
                 type="text"
                 placeholder="Type here"
                 className="input input-bordered w-full "
