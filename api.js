@@ -32,7 +32,7 @@ export const editTodo = async (todo) => {
   return updatedTodo;
 };
 
-export const deleteTodo = async (todo) => {
+export const deleteTodo = async (id) => {
   await fetch(`${baseUrl}/tasks/${id}`, {
     method: "DELETE",
   });

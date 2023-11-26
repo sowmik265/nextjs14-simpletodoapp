@@ -1,5 +1,5 @@
 "use client";
-import { editTodo } from "@/api";
+import { deleteTodo, editTodo } from "@/api";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
@@ -21,8 +21,13 @@ const Task = ({ task }) => {
       id: task.id,
       text: taskToEditValue,
     });
-    setTaskToEditValue("");
     setOpenModalEdit(false);
+    router.refresh();
+  };
+
+  const handleDeleteTask = async (id) => {
+    await deleteTodo(id);
+    setOpenModalDelete(false);
     router.refresh();
   };
 
@@ -34,11 +39,6 @@ const Task = ({ task }) => {
           onClick={() => setOpenModalEdit(true)}
           cursor="pointer"
           className=" text-blue-500"
-          size={21}
-        />
-        <RiDeleteBin2Fill
-          cursor="pointer"
-          className=" text-red-500"
           size={21}
         />
         <Modal modalOpen={openModalEdit} setModalOpen={setOpenModalEdit}>
@@ -57,6 +57,22 @@ const Task = ({ task }) => {
               </button>
             </div>
           </form>
+        </Modal>
+        <RiDeleteBin2Fill
+          onClick={() => setOpenModalDelete(true)}
+          cursor="pointer"
+          className=" text-red-500"
+          size={21}
+        />
+        <Modal modalOpen={openModalDelete} setModalOpen={setOpenModalDelete}>
+          <h3 className=" text-lg">
+            Are you sure, you want to delete this task?
+          </h3>
+          <div className="modal-action">
+            <button onClick={() => handleDeleteTask(task.id)} className="btn">
+              Yes
+            </button>
+          </div>
         </Modal>
       </td>
     </tr>
