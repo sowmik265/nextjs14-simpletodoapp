@@ -1,17 +1,27 @@
 "use client";
+import { addTodo } from "@/api";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
+import { v4 as uuidv4 } from "uuid";
 import Modal from "./Modal";
 
 const AddTask = () => {
+  const router = useRouter();
+
   const [modalOpen, setModalOpen] = useState(false);
 
   const [newTaskValue, setNewTaskValue] = useState("");
 
-  const handleSubmitNewTodo = (e) => {
+  const handleSubmitNewTodo = async (e) => {
     e.preventDefault();
-    console.log(newTaskValue);
+    await addTodo({
+      id: uuidv4(),
+      text: newTaskValue,
+    });
     setNewTaskValue("");
+    setModalOpen(false);
+    router.refresh();
   };
 
   return (
